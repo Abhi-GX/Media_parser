@@ -61,17 +61,37 @@ const main = async () => {
     // username extract code
     const recentChats = await page.evaluate(() => {
       const chatItems = document.querySelectorAll('div[role="listitem"]');
-      return Array.from(chatItems).slice(0, 5).map(item => {
+      return Array.from(chatItems).slice(0, 5).map(item => {                        // change here no of recent usernames
         const usernameElement = item.querySelector('span.x1lliihq.x193iq5w.x6ikm8r.x10wlt62.xlyipyv.xuxw1ft');
         return usernameElement ? usernameElement.textContent.trim() : 'Unknown';
       });
     });
 
 
-    console.log("Top 3 recent chat huka's usernames:");
+    console.log("Top recent chat huka's usernames:");
     recentChats.forEach((username, index) => {
       console.log(`${index + 1}. ${username}`);
     });
+    const chatWithAnuragClicked = await page.evaluate(() => {
+      const chatItems = document.querySelectorAll('div[role="listitem"]');
+      for (const item of chatItems) {
+        const usernameElement = item.querySelector('span.x1lliihq.x193iq5w.x6ikm8r.x10wlt62.xlyipyv.xuxw1ft');
+        if (usernameElement && usernameElement.textContent.trim() === "Anurag") {   // change here username
+          item.click();
+          return true;
+        }
+      }
+      return false;
+    });
+
+    if (chatWithAnuragClicked) {
+      await page.waitForSelector('div[role="textbox"]', { timeout: 30000 });
+      console.log("Anurag huka's chat is opened");
+    } else {
+      console.log("Couldn't get  Anurag");
+    }
+
+    await new Promise(resolve => {});
 
   } catch (error) {
     console.error("Error occurred:", error);
