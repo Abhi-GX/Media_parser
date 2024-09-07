@@ -16,7 +16,7 @@ const main = async () => {
 
     await page.goto(url, { waitUntil: "networkidle2" });
 
-    // Login
+    // Login code
     await page.waitForSelector('input[name="username"]');
     await page.type('input[name="username"]', process.env.USERNAME1);
     await page.waitForSelector('input[name="password"]');
@@ -24,18 +24,18 @@ const main = async () => {
     await wait(2000);
     await page.click('button[type="submit"]');
 
-    // Wait for navigation after login
+    
     await page.waitForNavigation({ waitUntil: "networkidle2" });
 
-    // Handle potential "Save Login Info" popup
+    
     try {
       await page.waitForSelector('div[role="button"][tabindex="0"]', { timeout: 5000 });
       await page.click('div[role="button"][tabindex="0"]');
     } catch (error) {
-      console.log("'Save Login Info' popup not found, continuing...");
+      console.log("'pop 1 degara mingindhi...");
     }
 
-    // Handle potential "Turn on Notifications" popup
+    
     try {
       await page.waitForSelector('button._a9--', { timeout: 5000 });
       await page.evaluate(() => {
@@ -48,18 +48,17 @@ const main = async () => {
         }
       });
     } catch (error) {
-      console.log("'Turn on Notifications' popup not found, continuing...");
+      console.log("'Turn on Notifications pop up degara mingindhi...");
     }
 
 
-    // Navigate to the chat section
+    // chat link leda click chat option
     await page.goto("https://www.instagram.com/direct/inbox/", { waitUntil: "networkidle2" });
     console.log("Navigated to the chat section");
     await wait(1000);
-    // Wait for the chat list to load
     await page.waitForSelector('div[role="listitem"]', { timeout: 30000 });
 
-    // Extract usernames of the top 3 recent chats
+    // username extract code
     const recentChats = await page.evaluate(() => {
       const chatItems = document.querySelectorAll('div[role="listitem"]');
       return Array.from(chatItems).slice(0, 5).map(item => {
@@ -69,7 +68,7 @@ const main = async () => {
     });
 
 
-    console.log("Top 3 recent chat usernames:");
+    console.log("Top 3 recent chat huka's usernames:");
     recentChats.forEach((username, index) => {
       console.log(`${index + 1}. ${username}`);
     });
