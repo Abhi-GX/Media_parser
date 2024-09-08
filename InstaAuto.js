@@ -52,7 +52,8 @@ const main = async () => {
     }
 
 
-    // chat link leda click chat option
+    // chat link leda click chat option   
+    
     await page.goto("https://www.instagram.com/direct/inbox/", { waitUntil: "networkidle2" });
     console.log("Navigated to the chat section");
     await wait(1000);
@@ -83,12 +84,40 @@ const main = async () => {
       }
       return false;
     });
-
+    await wait(1000);
     if (chatWithAnuragClicked) {
-      await page.waitForSelector('div[role="textbox"]', { timeout: 30000 });
-      console.log("Anurag huka's chat is opened");
+      console.log("Successfully clicked on the chat with Anurag");
+      await page.waitForSelector('div[role="row"]', { timeout: 30000 });
+      console.log("Chat with Anurag is now open");
+      const messages = await page.evaluate(() => {
+        const messageRows = document.querySelectorAll('div[role="row"]');
+        return Array.from(messageRows).map(row => {
+          const senderElement = row.querySelector('h5 span.xzpqnlu, h4 span.xzpqnlu');
+          const contentElement = row.querySelector('div[dir="auto"]');
+          let sender = 'Anurag';
+          let content = '';
+
+          if (senderElement) {
+            sender = senderElement.textContent.trim();
+          } else if (row.querySelector('h5 span:not(.xzpqnlu)')) {
+            sender = 'Target';
+          }
+
+          if (contentElement) {
+            content = contentElement.textContent.trim();
+          }
+
+          return { sender, content };
+        }).filter(message => message.content !== '' && !message.content.includes('Enter'));
+      });
+
+      console.log(`Number of messages found: ${messages.length}`);
+      console.log("Chat messages:");
+      messages.forEach((message, index) => {
+        console.log(`${index + 1}. ${message.sender}: ${message.content}`);
+      });
     } else {
-      console.log("Couldn't get  Anurag");
+      console.log("Couldn't find a chat with Anurag");
     }
 
     await new Promise(resolve => {});
