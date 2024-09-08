@@ -15,8 +15,7 @@ const autoScroll = async (page) => {
         const timer = setInterval(() => {
           window.scrollBy(0, distance);
           totalHeight += distance;
-  
-          if (totalHeight >= 1500) {
+          if (totalHeight >= 1000) {
             clearInterval(timer);
             resolve();
           }
@@ -82,6 +81,20 @@ const main = async () => {
     await wait(2000);
     await page.screenshot({ path: 'x_profile.png', fullPage: true });
     console.log("Profile page screenshot taken!");
+    await page.goto(`https://x.com/${process.env.TwitUser}/following`, { waitUntil: "networkidle2" });
+    console.log(`Navigated to following`);
+
+    await autoScroll(page);
+
+    const usernames1 = await page.$$eval('[data-testid="UserCell"] a[href*="/"]', links =>
+      links.map(link => link.getAttribute('href').replace('/', ''))
+    );
+    const usernames = [...new Set(usernames1)];
+
+    console.log("User is following these accounts:");
+    usernames.forEach((username, index) => {
+      console.log(`${index + 1}. ${username}`);
+    });
   } catch (error) {
     console.error("Error during login: ", error);
   } finally {
