@@ -50,10 +50,18 @@ const main = async () => {
     } catch (error) {
       console.log("'Turn on Notifications pop up degara mingindhi...");
     }
+    await wait(2000);
+    await page.goto(`https://www.instagram.com/${process.env.USERNAME1}/`, { waitUntil: "networkidle2" });
+    await page.waitForSelector('header section');
+
+    // profile screenshot code 
+    
+    await page.screenshot({ path: 'instagram_profile.png', fullPage: true });
+    console.log("Screenshot saved as instagram_profile.png");
 
 
     // chat link leda click chat option   
-    
+
     await page.goto("https://www.instagram.com/direct/inbox/", { waitUntil: "networkidle2" });
     console.log("Navigated to the chat section");
     await wait(1000);
@@ -96,7 +104,6 @@ const main = async () => {
           const contentElement = row.querySelector('div[dir="auto"]');
           let sender = 'Anurag';
           let content = '';
-
           if (senderElement) {
             sender = senderElement.textContent.trim();
           } else if (row.querySelector('h5 span:not(.xzpqnlu)')) {
