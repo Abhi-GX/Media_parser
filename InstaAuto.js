@@ -7,6 +7,7 @@ puppeteer.use(StealthPlugin());
 const url = "https://www.instagram.com/";
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+
 const main = async () => {
   let browser;
   console.log(process.env.USERNAME);
@@ -51,12 +52,14 @@ const main = async () => {
       console.log("'Turn on Notifications pop up degara mingindhi...");
     }
     await wait(2000);
+    await page.screenshot({ path: '1stpage.png', fullPage: true });
+    await wait(2000);
     await page.goto(`https://www.instagram.com/${process.env.USERNAME1}/`, { waitUntil: "networkidle2" });
     await page.waitForSelector('header section');
 
     // profile screenshot code 
-    
-    await page.screenshot({ path: 'instagram_profile.png', fullPage: true });
+
+    await page.screenshot({ path: 'profilepage.png', fullPage: true });
     console.log("Screenshot saved as instagram_profile.png");
 
 
