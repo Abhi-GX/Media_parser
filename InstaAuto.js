@@ -13,7 +13,7 @@ const main = async () => {
     browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Navigate to Instagram login page
+    
     await page.goto(url, { waitUntil: "networkidle2" });
 
     // Login process
@@ -24,32 +24,30 @@ const main = async () => {
     await wait(2000);
     await page.click('button[type="submit"]');
 
-    // Wait for navigation after login submission
     await page.waitForNavigation({ waitUntil: "networkidle2" });
 
-    // Check for Two-Factor Authentication (2FA) prompt
+    // Check for Two-Factor Authentication prompt
     let otpRequired = false;
     try {
       await page.waitForSelector('input[name="verificationCode"]', { timeout: 5000 }); // OTP field for 2FA
       otpRequired = true;
       console.log("2FA is enabled. Please enter the OTP sent to your mobile device in the browser window.");
       
-      // Pause to allow the user to enter the OTP
+      
       await page.waitForFunction(
-        () => !document.querySelector('input[name="verificationCode"]'), // Wait for OTP field to disappear after submission
-        { timeout: 60000 } // Allow up to 1 minute for OTP entry
+        () => !document.querySelector('input[name="verificationCode"]'), 
+        { timeout: 60000 } 
       );
       console.log("OTP entered successfully, continuing...");
     } catch (error) {
       console.log("No 2FA detected, continuing login process...");
     }
 
-    // Continue with navigation after OTP verification or if 2FA is not required
+    
     if (otpRequired) {
-      await page.waitForNavigation({ waitUntil: "networkidle2" }); // Wait for page to load after OTP
+      await page.waitForNavigation({ waitUntil: "networkidle2" }); 
     }
 
-    // Handle post-login pop-ups
     try {
       await page.waitForSelector('div[role="button"][tabindex="0"]', { timeout: 5000 });
       await page.click('div[role="button"][tabindex="0"]');
@@ -57,7 +55,6 @@ const main = async () => {
       console.log("Popup 1 appeared and handled.");
     }
 
-    // Handle 'Turn on Notifications' pop-up
     try {
       await page.waitForSelector('button._a9--', { timeout: 5000 });
       await page.evaluate(() => {
@@ -73,7 +70,6 @@ const main = async () => {
       console.log("'Turn on Notifications' pop-up appeared and handled.");
     }
 
-    // Take a screenshot of the profile page
     await wait(2000);
     await page.screenshot({ path: '1stpage.png', fullPage: true });
     await wait(2000);
@@ -83,13 +79,11 @@ const main = async () => {
     await page.screenshot({ path: 'profilepage.png', fullPage: true });
     console.log("Screenshot saved as instagram_profile.png");
 
-    // Navigate to the chat section
     await page.goto("https://www.instagram.com/direct/inbox/", { waitUntil: "networkidle2" });
     console.log("Navigated to the chat section");
     await wait(1000);
     await page.waitForSelector('div[role="listitem"]', { timeout: 30000 });
 
-    // Extract top recent chats
     const recentChats = await page.evaluate(() => {
       const chatItems = document.querySelectorAll('div[role="listitem"]');
       return Array.from(chatItems).slice(0, 5).map(item => {
@@ -103,7 +97,6 @@ const main = async () => {
       console.log(`${index + 1}. ${username}`);
     });
 
-    // Click on chat with "Anurag"
     const chatWithAnuragClicked = await page.evaluate(() => {
       const chatItems = document.querySelectorAll('div[role="listitem"]');
       for (const item of chatItems) {
@@ -121,8 +114,7 @@ const main = async () => {
       console.log("Successfully clicked on the chat with Anurag");
       await page.waitForSelector('div[role="row"]', { timeout: 30000 });
       console.log("Chat with Anurag is now open");
-
-      // Scroll chat to load all messages
+      //scroll
       const scrollChat = async () => {
         await page.evaluate(async () => {
           const chatBox = document.querySelector('div[role="grid"]');
