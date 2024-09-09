@@ -11,15 +11,15 @@ const autoScroll = async (page) => {
     await page.evaluate(async () => {
       await new Promise((resolve) => {
         let totalHeight = 0;
-        const distance = 20; // Distance to scroll each time
+        const distance = 30; // Distance to scroll each time
         const timer = setInterval(() => {
           window.scrollBy(0, distance);
           totalHeight += distance;
-          if (totalHeight >= 1000) {
+          if (totalHeight >= 1500) {
             clearInterval(timer);
             resolve();
           }
-        }, 200); // Speed of the scroll (milliseconds between scrolls)
+        }, 300); // Speed of the scroll (milliseconds between scrolls)
       });
     });
   };
@@ -70,14 +70,12 @@ const main = async () => {
     } catch (error) {
       console.log("Popups handled or none appeared.");
     }
-    await wait(1000);
     await autoScroll(page);
     await wait(5000);
     await page.screenshot({ path: 'x_login.png', fullPage: true });
     console.log("Login successful!");
     await page.goto(`https://x.com/${process.env.TwitUser}`, { waitUntil: "networkidle2" });
-    
-    // Take screenshot of the profile page
+    +
     await wait(2000);
     await page.screenshot({ path: 'x_profile.png', fullPage: true });
     console.log("Profile page screenshot taken!");
