@@ -76,9 +76,6 @@ const main = async () => {
     } catch (error) {
       console.log("No OTP detected or error in OTP entry, continuing login process...");
     }
-
-
-
     await wait(4000);
     await page.screenshot({ path: 'Growwdashboard.png', fullPage: true });
 
@@ -100,7 +97,6 @@ const main = async () => {
     // await page.goto(url + "/mutual-funds/user/investments", { waitUntil: "networkidle2", timeout: 60000 });
     // await wait(2000);
     await page.screenshot({ path: 'GrowwMutualFunds.png', fullPage: true });
-
   } catch (error) {
     console.error("Error occurred:", error);
   } finally {
