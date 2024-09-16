@@ -12,11 +12,7 @@ const main = async () => {
   try {
     browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-
-    
     await page.goto(url, { waitUntil: "networkidle2" });
-
-    // Login process
     await page.waitForSelector('input[name="username"]');
     await page.type('input[name="username"]', process.env.USERNAME1);
     await page.waitForSelector('input[name="password"]');
@@ -25,8 +21,6 @@ const main = async () => {
     await page.click('button[type="submit"]');
 
     await page.waitForNavigation({ waitUntil: "networkidle2" });
-
-    // Check for Two-Factor Authentication prompt
     let otpRequired = false;
     // try {
     //   await page.waitForSelector('input[name="verificationCode"]', { timeout: 5000 }); // OTP field for 2FA
@@ -72,12 +66,12 @@ const main = async () => {
 
     await wait(2000);
     
-    await page.screenshot({ path: '1stpage.png', fullPage: true });
+    await page.screenshot({ path: 'screenshots/1stpage.png', fullPage: true });
     await wait(300);
     await page.goto(`https://www.instagram.com/${process.env.USERNAME1}/`, { waitUntil: "networkidle2" });
     await page.waitForSelector('header section');
 
-    await page.screenshot({ path: 'profilepage.png', fullPage: true });
+    await page.screenshot({ path: 'screenshots/profilepage.png', fullPage: true });
     console.log("Screenshot saved as instagram_profile.png");
 
     await page.goto("https://www.instagram.com/direct/inbox/", { waitUntil: "networkidle2" });
@@ -133,7 +127,6 @@ const main = async () => {
         newHeight = await page.evaluate(() => document.querySelector('div[role="grid"]').scrollHeight);
       } while (newHeight > previousHeight);
 
-      // Extract chat messages
       const messages = await page.evaluate(() => {
         const messageRows = document.querySelectorAll('div[role="row"]');
         return Array.from(messageRows).map(row => {

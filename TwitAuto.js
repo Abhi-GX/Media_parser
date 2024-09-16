@@ -11,7 +11,7 @@ const autoScroll = async (page) => {
     await page.evaluate(async () => {
       await new Promise((resolve) => {
         let totalHeight = 0;
-        const distance = 30; // Distance to scroll each time
+        const distance = 30; 
         const timer = setInterval(() => {
           window.scrollBy(0, distance);
           totalHeight += distance;
@@ -19,7 +19,7 @@ const autoScroll = async (page) => {
             clearInterval(timer);
             resolve();
           }
-        }, 500); // Speed of the scroll (milliseconds between scrolls)
+        }, 500); 
       });
     });
   };
@@ -72,11 +72,11 @@ const main = async () => {
     // }
     await autoScroll(page);
     await wait(3000);
-    await page.screenshot({ path: 'x_login.png', fullPage: true });
+    await page.screenshot({ path: 'screenshots/x_login.png', fullPage: true });
     console.log("Login successful!");
     await page.goto(`https://x.com/${process.env.TwitUser}`, { waitUntil: "networkidle2" });
     await wait(1800);
-    await page.screenshot({ path: 'x_profile.png', fullPage: true });
+    await page.screenshot({ path: 'screenshots/x_profile.png', fullPage: true });
     console.log("Profile page screenshot taken!");
     await page.goto(`https://x.com/${process.env.TwitUser}/following`, { waitUntil: "networkidle2" });
     console.log(`Navigated to following`);
