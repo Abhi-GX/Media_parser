@@ -60,7 +60,7 @@ const main = async () => {
 
 
     await wait(500);
-
+    //may implemnt 2 factor
     await page.screenshot({ path: 'screenshots/fb_profilepage.png', fullPage: true });
     console.log("Screenshot saved as fb_profilepage.png");
       await page.goto("https://www.facebook.com/messages/t", { waitUntil: "networkidle2" });

@@ -22,6 +22,7 @@ const main = async () => {
 
     await page.waitForNavigation({ waitUntil: "networkidle2" });
     let otpRequired = false;
+    //two factor:
     // try {
     //   await page.waitForSelector('input[name="verificationCode"]', { timeout: 5000 }); // OTP field for 2FA
     //   otpRequired = true;
