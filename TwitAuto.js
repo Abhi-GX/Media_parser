@@ -70,7 +70,7 @@ const main = async () => {
     // } catch (error) {
     //   console.log("Popups handled or none appeared.");
     // }
-    //future insights
+    //future insights in case 2 -factor
     await autoScroll(page);
     await wait(3000);
     await page.screenshot({ path: 'screenshots/x_login.png', fullPage: true });
